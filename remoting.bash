@@ -59,7 +59,7 @@ function out { printf '%s\n' "$*" ;}
 # Handles "no-match" exit code specified by POSIX for filtering tools.
 function maybe { "$@" || return $(( $? == 1 ? 0 : $? )) ;}
 
-if declare -f "${1:-}" >/dev/null
+if declare -f -- "${1:-}" >/dev/null
 then "$@"
 else main "$@"
 fi
