@@ -47,7 +47,7 @@ function remote {
 function serialized {
   declare -f                                        # Send function definitions
   echo 'set -o errexit -o nounset -o pipefail'          # Enable error handling
-  echo -n 'globals &&'                           # Ensure globals are recreated
+  echo '! declare -f globals || globals'           # Setup globals if available
   printf ' %q' "$@"                             # Print each argument, *quoted*
   echo                                      # Send a newline to run the command
 }
