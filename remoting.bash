@@ -6,13 +6,21 @@ cat <<USAGE
         remoting.bash remote <user>@<host> (--sudo)? -- <command> <arguments>*
 
   A template for Bash remoting. With the \`remote\` command, you can try
-  running commands or functions defined in the script on a remote machine.
+  running commands or functions defined in the script on a remote machine. For
+  example:
+
+   :; remoting.bash remote <user>@<host> -- fingerprint
+
+  When called with hostnames as arguments, or with the subcommand
+  \`fingerprints\`, the script remotely fingerprints all the target hosts:
+
+   :; remoting.bash 01.example.com 02.example.com ...
 
 USAGE
 }; function --help { -h ;}                 # A nice way to handle -h and --help
 
 function main {
-  : abstract
+  fingerprints "$@"
 }
 
 function globals {
@@ -24,7 +32,15 @@ function fingerprint {
   printf 'on %s (running %s) at %s\n' \
          "$(hostname -f)" "$(uname -s)" "$(date -u +'%F %T UTC')"
 }
-########## Body functions go here. Call one of them in main.
+
+function fingerprints {
+  for host in "$@"
+  do
+    remote "$host" -- fingerprint
+  done
+}
+
+########## Add more body functions here.
 
 ##################################################################### Utilities
 
